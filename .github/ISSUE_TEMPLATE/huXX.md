@@ -4,7 +4,6 @@ about: Crear una historia de usuario
 title: "[HU] "
 labels: Historia_Usuario
 assignees: ''
-type: Feature
 ---
 
 ---
