@@ -6,15 +6,6 @@ labels: Historia_Usuario
 assignees: ''
 ---
 
----
-name: HUXX - DESCRIPCION
-about: Describe la historia de usuario
-title: ''
-labels: ''
-assignees: ''
-
----
-
 | Identificador           | HU<< AAA >>                    |
 |-------------------------|--------------------------------|
 | Nombre                  | << Nombre >>                   |
