@@ -7,24 +7,106 @@ on:
 jobs:
   assign_project:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      repository-projects: write
     steps:
-    - name: Check for task label
-      id: check_label
-      run: |
-        if ! gh issue view ${{ github.event.issue.number }} --json labels | jq -e '.labels | map(.name) | index("Tarea")'; then
-          echo "Issue not created from the correct template." >&2
-          exit 1
+      - name: Check for task label
+        id: check_label
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          labels=$(gh api -H "Accept: application/vnd.github+json" /repos/${{ github.repository }}/issues/$ISSUE_NUMBER/labels | jq -r '.[].name')
+          if echo "$labels" | grep -q "Tarea"; then
+            echo "Has task label"
+            echo "has_task_label=true" >> $GITHUB_OUTPUT
+          else
+            echo "No task label found"
+            echo "has_task_label=false" >> $GITHUB_OUTPUT
+          fi
 
-    - name: Assign issue to a project
-      if: success()
-      run: |
-        gh project item add --project-name "CCP-TAREAS" --column-name "To do" --issue-number ${{ github.event.issue.number }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Add to project
+        if: steps.check_label.outputs.has_task_label == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+          ORGANIZATION: "Perspicapps-CCP"
+          PROJECT_NUMBER: "2"
+        run: |
+          # Obtener el ID del proyecto
+          project_id=$(gh api graphql -f query='
+            query($org: String!, $number: Int!) {
+              organization(login: $org){
+                projectV2(number: $number) {
+                  id
+                }
+              }
+            }' -f org=$ORGANIZATION -f number=$PROJECT_NUMBER --jq '.data.organization.projectV2.id')
+          
+          # Obtener el ID del campo Status
+          status_field_id=$(gh api graphql -f query='
+            query($project_id: ID!) {
+              node(id: $project_id) {
+                ... on ProjectV2 {
+                  fields(first: 20) {
+                    nodes {
+                      ... on ProjectV2Field {
+                        id
+                        name
+                      }
+                      ... on ProjectV2SingleSelectField {
+                        id
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+            }' -f project_id=$project_id --jq '.data.node.fields.nodes[] | select(.name=="Status") | .id')
 
-    - name: Assign issue to creator
-      if: success()
-      run: |
-        gh issue edit ${{ github.event.issue.number }} --add-assignee ${{ github.event.issue.user.login }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Obtener el ID de la opción "To do"
+          todo_option_id=$(gh api graphql -f query='
+            query($field_id: ID!) {
+              node(id: $field_id) {
+                ... on ProjectV2SingleSelectField {
+                  options {
+                    id
+                    name
+                  }
+                }
+              }
+            }' -f field_id=$status_field_id --jq '.data.node.options[] | select(.name=="To do") | .id')
+
+          # Añadir el issue al proyecto
+          item_id=$(gh api graphql -f query='
+            mutation($project_id: ID!, $issue_id: ID!) {
+              addProjectV2ItemById(input: {projectId: $project_id, contentId: $issue_id}) {
+                item {
+                  id
+                }
+              }
+            }' -f project_id=$project_id -f issue_id=${{ github.event.issue.node_id }} --jq '.data.addProjectV2ItemById.item.id')
+
+          # Establecer el estado como "To do"
+          gh api graphql -f query='
+            mutation($project_id: ID!, $item_id: ID!, $field_id: ID!, $option_id: String!) {
+              updateProjectV2ItemFieldValue(input: {
+                projectId: $project_id
+                itemId: $item_id
+                fieldId: $field_id
+                value: { 
+                  singleSelectOptionId: $option_id
+                }
+              }) {
+                projectV2Item {
+                  id
+                }
+              }
+            }' -f project_id=$project_id -f item_id=$item_id -f field_id=$status_field_id -f option_id=$todo_option_id
+
+      - name: Assign issue to creator
+        if: steps.check_label.outputs.has_task_label == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue edit ${{ github.event.issue.number }} --add-assignee ${{ github.event.issue.user.login }}
