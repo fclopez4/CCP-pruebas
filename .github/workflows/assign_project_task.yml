@@ -1,0 +1,17 @@
+name: Assign Project to Issues
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  assign_project:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Assign issue to a project
+      uses: actions-ecosystem/action-add-project-card@v1
+      with:
+        project_url: https://github.com/Perspicapps-CCP/CCP/projects/CCP-TAREAS
+        column_name: "To do"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
