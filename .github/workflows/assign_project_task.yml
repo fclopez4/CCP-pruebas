@@ -14,13 +14,19 @@ jobs:
         if ! gh issue view ${{ github.event.issue.number }} --json labels | jq -e '.labels | map(.name) | index("Tarea")'; then
           echo "Issue not created from the correct template." >&2
           exit 1
-        fi
-
+          
     - name: Assign issue to a project
       if: success()
       uses: actions-ecosystem/action-add-project-card@v1
       with:
         project_url: https://github.com/Perspicapps-CCP/CCP/projects/CCP-TAREAS
         column_name: "To do"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Assign issue to creator
+      if: success()
+      run: |
+        gh issue edit ${{ github.event.issue.number }} --add-assignee ${{ github.event.issue.user.login }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
