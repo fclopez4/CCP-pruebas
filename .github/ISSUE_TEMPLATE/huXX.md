@@ -14,6 +14,9 @@ assignees: ''
 | Mockups                 | <!-- Reemplaza esto con los enlaces a los mockups si existen --> |
 | Autor                   | @usuario                       |
 
+## Tareas Relacionadas
+- [ ] 
+
 ## Revisión
 
 | Criterio      | Comentario       | Realizado por | Solucionado |
