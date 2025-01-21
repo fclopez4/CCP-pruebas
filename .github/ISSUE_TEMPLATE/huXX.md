@@ -1,4 +1,12 @@
 ---
+name: Historia de usuario
+about: Crear una historia de usuario
+title: "[HU] "
+labels: Historia_Usuario
+assignees: ''
+---
+
+---
 name: HUXX - DESCRIPCION
 about: Describe la historia de usuario
 title: ''
