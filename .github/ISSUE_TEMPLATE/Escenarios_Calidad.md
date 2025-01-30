@@ -2,7 +2,7 @@
 name: Escenario de Calidad
 about: Crear un escenario de calidad
 title: "[SEC] "
-labels: Escenario_Calidad
+labels: ASR
 assignees: ''
 
 ---
