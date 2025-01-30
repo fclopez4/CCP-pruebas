@@ -1,11 +1,11 @@
 ---
-name: Escenario de Calidad
-about: Crear un escenario de calidad
+name: Historia de usuario
+about: Crear una historia de usuario
 title: "[SEC] "
 labels: ASR
 assignees: ''
-
 ---
+
 <table>
     <tbody>
         <tr>
