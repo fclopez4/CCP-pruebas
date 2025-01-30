@@ -4,9 +4,7 @@ about: Crear una nueva tarea
 title: "[TASK] "
 labels: Tarea
 assignees: ''
-milestone: 1
-projects: 
-  - Perspicapps-CCP/CCP/projects/CCP-TAREAS
+
 ---
 
 # Descripción de la tarea

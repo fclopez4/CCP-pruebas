@@ -4,8 +4,7 @@ about: Crear una historia de usuario
 title: "[HU] "
 labels: Historia_Usuario
 assignees: ''
-projects: 
-  - Perspicapps-CCP/CCP/projects/CCP-HISTORIAS
+
 ---
 
 | Identificador           | HU                            |
