@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-| Identificador           | HU                            |
+| Identificador           | HU-XX                         |
 |-------------------------|-------------------------------|
 | Nombre                  | <!-- Reemplaza esto con el nombre de la historia de usuario --> |
 | Descripción             | <!-- Como [tipo de usuario], quiero [objetivo o deseo] para [beneficio o razón]. --> |
