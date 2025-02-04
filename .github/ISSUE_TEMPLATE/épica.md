@@ -9,4 +9,4 @@ assignees: ''
 
 ## Descripción
 
-Como [tipo de usuario], quiero [objetivo o deseo] para [beneficio o razón].
+Historias de usuario requeridas para el feature [Nombre del feature] en la aplicación [Movil/Web] de CCP.
