@@ -11,7 +11,7 @@ assignees: ''
     <tbody>
         <tr>
             <td >ID</td>
-            <td colspan=3>HUA-11</td>
+            <td colspan=3>HUA-XX</td>
         </tr>
         <tr>
             <td>Nombre</td>
@@ -20,7 +20,7 @@ assignees: ''
         <tr>
             <td>Descripción</td>
             <td colspan=3 >
-Como administrador del sistema, cuando falle el componente de notificaciones dado que existe un alto volumen de usuarios conectados simultaneamente quiero que se active automaticamente un nodo de respaldo de este componente para que continue emitiendo estas notificaciones. Esto debe suceder en menos de 10 seg.
+Como [tipo de usuario o fuente], cuando [estimulo] dado que [artefacto y ambiente] quiero que [respuesta] para que [beneficio o razón]. Esto debe suceder [Medida de la respuesta].
           </td>
         </tr>
         <tr>
