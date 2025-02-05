@@ -1,8 +1,8 @@
 ---
 name: Escenario de Calidad
 about: Crear un escenario de calidad
-title: "[SEC] "
-labels: ASR, Tarea
+title: "[EC]-XX Titulo"
+labels: ''
 assignees: ''
 
 ---
@@ -11,7 +11,7 @@ assignees: ''
     <tbody>
         <tr>
             <td >ID</td>
-            <td colspan=3>HUA-XX</td>
+            <td colspan=3>EC-XX</td>
         </tr>
         <tr>
             <td>Nombre</td>
