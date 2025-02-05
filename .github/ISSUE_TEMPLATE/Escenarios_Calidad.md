@@ -2,7 +2,7 @@
 name: Escenario de Calidad
 about: Crear un escenario de calidad
 title: "[EC]-XX Titulo"
-labels: ''
+labels: Epica
 assignees: ''
 
 ---
@@ -20,7 +20,7 @@ assignees: ''
         <tr>
             <td>Descripción</td>
             <td colspan=3 >
-Como [tipo de usuario o fuente], cuando [estimulo] dado que [artefacto y ambiente] quiero que [respuesta] para que [beneficio o razón]. Esto debe suceder [Medida de la respuesta].
+Como [tipo de usuario o fuente], cuando [estimulo] dado que [artefacto y ambiente], quiero que [respuesta] para que [beneficio o razón]. Esto debe suceder [Medida de la respuesta].
           </td>
         </tr>
         <tr>
