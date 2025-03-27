@@ -39,14 +39,14 @@ This project is a FastAPI application for managing Inventory. It includes endpoi
 
 1. Start the Memcached server using Docker:
 
-    sh```
+    ```sh
     docker run -d --name memcached -p 11211:11211 memcached
     ```
 
 2. Run the FastAPI application:
 
     ```sh
-    uvicorn main:app --reload
+    uvicorn main:app --port 8000 --reload
     ```
 
     The application will be available at `http://127.0.0.1:8000`.
@@ -57,13 +57,8 @@ This project is a FastAPI application for managing Inventory. It includes endpoi
 To run the tests, use the following command:
 
 ```sh
-    uvicorn main:app  --port 8000
-```
-
-
-
 pytest --cov=. -v -s --cov-fail-under=70
-
+```
 
 Pre commit
 
@@ -97,7 +92,7 @@ Usado para verificar el estado del servicio.
 </tr>
 <tr>
 <td> Ruta </td>
-<td> <strong>/inventory/ping</strong> </td>
+<td> <strong>/inventory/health</strong> </td>
 </tr>
 <tr>
 <td> Parámetros </td>
@@ -212,7 +207,7 @@ Crea una nueva bodega.
 
 ```json
 {
-  "warehouseName": nombre de la bodega,
+  "warehouse_name": nombre de la bodega,
   "country": pais en donde está la bodega,
   "city": pais en donde está la bodega,
   "address": direccion de la bodega,
@@ -259,9 +254,9 @@ Crea una nueva bodega.
 
 ```json
 {
-  "warehouseId": id de la bodega,
-  "userId": id del usuario que creo la bodega,
-  "createdAt": fecha y hora de creación de la bodega en formato ISO
+  "warehouse_id": id de la bodega,
+  "user_id": id del usuario que creo la bodega,
+  "created_at": fecha y hora de creación de la bodega en formato ISO
 }
 ```
 </td>
@@ -338,13 +333,13 @@ En el caso de que ninguno esté presente se devolverá la lista de datos sin fil
 ```json
 [
   {
-    "warehouseId": id de la bodega,
-    "warehouseName": nombre de la bodega,
+    "warehouse_id": id de la bodega,
+    "warehouse_name": nombre de la bodega,
     "country": pais en donde está la bodega,
     "city": pais en donde está la bodega,
     "address": direccion de la bodega,
     "phone": telefono de contacto de la bodega,
-    "lastUpdate": fecha de la ultima actualización de los datos de la bodega
+    "last_update": fecha de la ultima actualización de los datos de la bodega
   }
 ]
 ```
@@ -420,13 +415,13 @@ Retorna el detalle de una bodega, solo un usuario autorizado puede realizar esta
 
 ```json
   {
-    "warehouseId": id de la bodega,
-    "warehouseName": nombre de la bodega,
+    "warehouse_id": id de la bodega,
+    "warehouse_name": nombre de la bodega,
     "country": pais en donde está la bodega,
     "city": pais en donde está la bodega,
     "address": direccion de la bodega,
     "phone": telefono de contacto de la bodega,
-    "lastUpdate": fecha de la ultima actualización de los datos de la bodega
+    "last_update": fecha de la ultima actualización de los datos de la bodega
   }
 ```
 </td>
@@ -465,8 +460,8 @@ Crea el inventario de un producto si este no existe, en caso contrario actualiza
 ```json
 [
   {
-    "productId":id del producto,
-    "warehouseId": id de la bodega,
+    "product_id":id del producto,
+    "warehouse_id": id de la bodega,
     "quantity": unidades del producto que se desean registrar en la bodega,
   }
 ]
@@ -511,9 +506,9 @@ Crea el inventario de un producto si este no existe, en caso contrario actualiza
 
 ```json
 {
-  "operationId": id de la operación de carga,
-  "userId": id del usuario que realizó la carga de inventario,
-  "createdAt": fecha y hora en que se realizó la carga de inventario, en formato ISO
+  "operation_id": id de la operación de carga,
+  "user_id": id del usuario que realizó la carga de inventario,
+  "created_at": fecha y hora en que se realizó la carga de inventario, en formato ISO
 }
 ```
 </td>
@@ -590,10 +585,10 @@ En el caso de que ninguno esté presente se devolverá la lista de datos sin fil
 ```json
 [
   {
-    "productId":id del producto,
-    "warehouseId": id de la bodega,
+    "product_id":id del producto,
+    "warehouse_id": id de la bodega,
     "quantity": unidades disponibles del producto en la bodega,
-    "lastUpdate": fecha de la ultima actualización del inventario
+    "last_update": fecha de la ultima actualización del inventario
   }
 ]
 ```
@@ -613,11 +608,11 @@ Retorna el inventario de un producto, solo un usuario autorizado puede realizar 
 </tr>
 <tr>
 <td> Ruta </td>
-<td> <strong>/inventory/{productId}</strong> </td>
+<td> <strong>/inventory/{id}</strong> </td>
 </tr>
 <tr>
 <td> Parámetros </td>
-<td> productId: id del producto que se desea consultar. </td>
+<td> id: id del producto que se desea consultar. </td>
 </tr>
 <tr>
 <td> Encabezados </td>
@@ -669,10 +664,10 @@ Retorna el inventario de un producto, solo un usuario autorizado puede realizar 
 
 ```json
   {
-    "productId":id del producto,
-    "warehouseId": id de la bodega,
+    "product_id":id del producto,
+    "warehouse_id": id de la bodega,
     "quantity": unidades disponibles del producto en la bodega,
-    "lastUpdate": fecha de la ultima actualización del inventario
+    "last_update": fecha de la ultima actualización del inventario
   }
 ```
 </td>
