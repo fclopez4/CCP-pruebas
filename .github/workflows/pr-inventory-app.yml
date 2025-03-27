@@ -1,4 +1,4 @@
-name: Run unit test for inventory service
+name: Run unit test before PR approval for inventory service
 
 on:
   pull_request:
