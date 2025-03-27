@@ -1,13 +1,9 @@
-name: Run CI/CD for logistic service
+name: Run CI/CD for inventory service
 
 on:
   push:
     paths:
-      - "logistic/**"
-    branches: [ "main" ]
-  pull_request:
-    paths:
-      - "logistic/**"
+      - "inventory/**"
     branches: [ "main" ]
 
 env:
@@ -31,13 +27,13 @@ jobs:
       with:
         python-version: "3.13.1"
     - name: Install pipenv
-      working-directory: ./logistic
+      working-directory: ./inventory
       run: pip install pipenv
     - name: Install dependencies      
-      working-directory: ./logistic
+      working-directory: ./inventory
       run: pipenv install --dev --system --deploy
     - name: Run unit tests
-      working-directory: ./logistic
+      working-directory: ./inventory
       run: pipenv run pytest --cov=. -v -s --cov-fail-under=70
 
   build:
@@ -78,15 +74,15 @@ jobs:
           gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 
       - name: Build image
-        working-directory: ./logistic
+        working-directory: ./inventory
         run: |
-          docker build . --tag ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/ccp-images/logistic:${{ steps.generate_tag.outputs.version_tag }}
-          docker build . --tag ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/ccp-images/logistic:latest
+          docker build . --tag ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/ccp-images/inventory:${{ steps.generate_tag.outputs.version_tag }}
+          docker build . --tag ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/ccp-images/inventory:latest
 
       - name: Push image to artifact registry
         run: |
-          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/ccp-images/logistic:${{ steps.generate_tag.outputs.version_tag }}
-          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/ccp-images/logistic:latest
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/ccp-images/inventory:${{ steps.generate_tag.outputs.version_tag }}
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/ccp-images/inventory:latest
 
   deploy:
     needs: build
@@ -123,10 +119,10 @@ jobs:
           kustomize version
       
       - name: 'Deploy to GKE'
-        working-directory: ./deployment/logistic
+        working-directory: ./deployment/inventory
         run: |-
-          kustomize edit set image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/ccp-images/logistic:latest=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/ccp-images/logistic:${{ needs.build.outputs.version_tag }}
+          kustomize edit set image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/ccp-images/inventory:latest=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/ccp-images/inventory:${{ needs.build.outputs.version_tag }}
           kustomize build . | kubectl apply -f -
-          kubectl rollout status deployment/logistic-api
-          kubectl rollout status deployment/logistic-broker-consumer
+          kubectl rollout status deployment/inventory-api
+          kubectl rollout status deployment/inventory-broker-consumer
           kubectl get services -o wide
