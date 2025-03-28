@@ -1,0 +1,213 @@
+# users DB
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: users-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users-db
+  template:
+    metadata:
+      labels:
+        app: users-db
+    spec:
+      containers:
+      - name: users-db
+        image: postgres:latest
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: users-secrets
+              key: DB_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: users-secrets
+              key: DB_PASSWORD
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: users-config
+              key: DB_NAME
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5432
+        readinessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -d
+            - $(POSTGRES_DB)
+            - -U
+            - $(POSTGRES_USER)
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 5
+        volumeMounts:
+        - name: users-data
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: users-data
+        persistentVolumeClaim:
+          claimName: users-pvc
+---
+# users Broker Consumer
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-broker-consumer
+  labels:
+    app: users-broker-consumer
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: users-broker-consumer
+  template:
+    metadata:
+      labels:
+        app: users-broker-consumer
+    spec:
+      containers:
+      - name: users-broker-consumer
+        image: us-central1-docker.pkg.dev/ccp-perspicapps/ccp-images/users:latest
+        command: ["python", "-u", "start_broker_consumer.py"]
+        env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: users-secrets
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: users-secrets
+              key: DB_PASSWORD
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: users-config
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: users-config
+              key: DB_PORT
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: users-config
+              key: DB_NAME
+        - name: BROKER_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: users-config
+              key: BROKER_HOST
+        - name: RESERVE_ITEMS_TOPIC
+          valueFrom:
+            configMapKeyRef:
+              name: users-config
+              key: RESERVE_ITEMS_TOPIC
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+---
+# users API
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users-api
+  template:
+    metadata:
+      labels:
+        app: users-api
+    spec:
+      containers:
+      - name: users-api
+        image: us-central1-docker.pkg.dev/ccp-perspicapps/ccp-images/users:latest
+        command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8001"]
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        ports:
+        - containerPort: 8001
+        env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: users-secrets
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: users-secrets
+              key: DB_PASSWORD
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: users-config
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: users-config
+              key: DB_PORT
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: users-config
+              key: DB_NAME
+        - name: BROKER_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: users-config
+              key: BROKER_HOST
+        - name: RESERVE_ITEMS_TOPIC
+          valueFrom:
+            configMapKeyRef:
+              name: users-config
+              key: RESERVE_ITEMS_TOPIC
+        livenessProbe:
+          httpGet:
+            path: /users/health
+            port: 8001
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 1
+          failureThreshold: 2
