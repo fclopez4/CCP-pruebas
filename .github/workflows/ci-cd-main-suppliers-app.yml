@@ -127,7 +127,6 @@ jobs:
           kustomize build . | kubectl apply -f -
           kubectl apply -f k8s-configmap-secrets.yml
           kubectl apply -f k8s-service.yml
-          kubectl apply -f k8s-ingress.yml
           kubectl rollout status deployment/suppliers-api
           kubectl rollout status deployment/suppliers-broker-consumer
           kubectl get services -o wide
