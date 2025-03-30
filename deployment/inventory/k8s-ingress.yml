@@ -8,6 +8,7 @@ metadata:
 spec:
   rules:
   - http:
+      paths:
       - path: /inventory
         pathType: Prefix
         backend:
