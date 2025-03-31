@@ -20,6 +20,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 prefix_router = APIRouter(prefix="/logistica")
 
 prefix_router.include_router(deliveries_router)
