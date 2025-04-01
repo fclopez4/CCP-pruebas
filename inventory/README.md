@@ -57,7 +57,7 @@ This project is a FastAPI application for managing Inventory. It includes endpoi
 To run the tests, use the following command:
 
 ```sh
-pytest --cov=. -v -s --cov-fail-under=70
+pytest --cov=. -v -s --cov-fail-under=80
 ```
 
 Pre commit
@@ -440,7 +440,7 @@ Crea el inventario de un producto si este no existe, en caso contrario actualiza
 </tr>
 <tr>
 <td> Ruta </td>
-<td> <strong>/inventory</strong> </td>
+<td> <strong>/inventory/stock</strong> </td>
 </tr>
 <tr>
 <td> Parámetros </td>
@@ -527,7 +527,7 @@ Retorna el listado de inventario que coinciden con los parámetros brindados. So
 </tr>
 <tr>
 <td> Ruta </td>
-<td> <strong>/inventory?product={productId}&warehouse={warehouseId}</strong> </td>
+<td> <strong>/inventory/stock?product={productId}&warehouse={warehouseId}</strong> </td>
 </tr>
 <tr>
 <td> Parámetros </td>
@@ -608,7 +608,7 @@ Retorna el inventario de un producto, solo un usuario autorizado puede realizar 
 </tr>
 <tr>
 <td> Ruta </td>
-<td> <strong>/inventory/{id}</strong> </td>
+<td> <strong>/inventory/stock/{id}</strong> </td>
 </tr>
 <tr>
 <td> Parámetros </td>
