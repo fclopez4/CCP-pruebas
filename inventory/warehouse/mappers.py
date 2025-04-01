@@ -1,8 +1,7 @@
-
 from warehouse import models, schemas
 
 
-def warehouse_created_to_shema(
+def warehouse_created_to_schema(
     warehouse: models.Warehouse,
 ) -> schemas.WarehouseCreateResponseSchema:
     """Convert a Warehouse model to a WarehouseCreateResponseSchema."""
@@ -13,8 +12,9 @@ def warehouse_created_to_shema(
         city=warehouse.city,
         address=warehouse.address,
         phone=warehouse.phone,
-        created_at=warehouse.created_at
+        created_at=warehouse.created_at,
     )
+
 
 def warehouse_list_to_schema(
     warehouses: list[models.Warehouse],
@@ -28,10 +28,11 @@ def warehouse_list_to_schema(
             city=warehouse.city,
             address=warehouse.address,
             phone=warehouse.phone,
-            last_update=warehouse.updated_at
+            last_update=warehouse.updated_at,
         )
         for warehouse in warehouses
     ]
+
 
 def warehouse_get_to_schema(
     warehouse: models.Warehouse,

@@ -23,7 +23,9 @@ def create_warehouse(
 def get_warehouse(db: Session, warehouse_id: str) -> models.Warehouse:
     """Get warehouse from id."""
     return (
-        db.query(models.Warehouse).filter(models.Warehouse.id == UUID(warehouse_id)).first()
+        db.query(models.Warehouse)
+        .filter(models.Warehouse.id == UUID(warehouse_id))
+        .first()
     )
 
 

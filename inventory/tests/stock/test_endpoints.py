@@ -44,9 +44,7 @@ def test_get_delivery(client: TestClient, delivery_payload: Dict) -> None:
     Test retrieving a delivery by its ID.
     """
     # First, create a delivery
-    create_response = client.post(
-        "/inventory/stock", json=delivery_payload
-    )
+    create_response = client.post("/inventory/stock", json=delivery_payload)
     delivery_id = create_response.json()["id"]
 
     # Then, get the delivery
@@ -69,9 +67,7 @@ def test_delete_delivery(client: TestClient, delivery_payload: Dict) -> None:
     Test deleting a delivery by its ID.
     """
     # First, create a delivery
-    create_response = client.post(
-        "/inventory/stock", json=delivery_payload
-    )
+    create_response = client.post("/inventory/stock", json=delivery_payload)
     delivery_id = create_response.json()["id"]
 
     # Then, delete the delivery

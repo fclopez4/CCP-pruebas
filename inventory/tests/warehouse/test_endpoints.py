@@ -14,9 +14,11 @@ def fake_warehouse() -> Dict:
     """Generate fake warehouse data"""
 
     phone_length = random.randint(7, 10)
-    phone_digits = ''.join([str(random.randint(0, 9)) for _ in range(phone_length)])
+    phone_digits = ''.join(
+        [str(random.randint(0, 9)) for _ in range(phone_length)]
+    )
     phone = int(phone_digits) if random.choice([True, False]) else phone_digits
-    
+
     return {
         "warehouse_name": re.sub(r'[^a-zA-Z0-9_ñÑ]', ' ', fake.company()),
         "country": fake.country(),
@@ -72,7 +74,9 @@ def test_get_single_warehouse(client: TestClient, fake_warehouse: Dict):
     warehouse = client.post("/inventory/warehouse", json=fake_warehouse)
 
     # Test warehouse found
-    response = client.get(f"/inventory/warehouse/{warehouse.json()['warehouse_id']}")
+    response = client.get(
+        f"/inventory/warehouse/{warehouse.json()['warehouse_id']}"
+    )
     assert response.status_code == 200
     response_data = response.json()
     assert response_data["warehouse_id"] == warehouse.json()["warehouse_id"]

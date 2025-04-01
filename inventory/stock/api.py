@@ -39,9 +39,7 @@ def list_all_deliveries(
     return [mappers.delivery_to_schema(delivery) for delivery in deliveries]
 
 
-@stock_router.delete(
-    "/{delivery_id}", response_model=schemas.DeleteResponse
-)
+@stock_router.delete("/{delivery_id}", response_model=schemas.DeleteResponse)
 def delete_delivery(delivery_id: UUID, db: Session = Depends(get_db)):
     db_delivery = services.delete_delivery(db, delivery_id=delivery_id)
     if db_delivery is None:
