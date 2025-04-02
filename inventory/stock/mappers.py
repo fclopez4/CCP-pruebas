@@ -23,3 +23,15 @@ def delivery_to_schema(
             for item in purchase.items
         ],
     )
+
+
+def stock_list_to_schema(stock_list: list[models.Stock]) -> list[schemas.StockResponseSchema]:
+    return [
+        schemas.StockResponseSchema(
+            product_id=stock.product_id,
+            warehouse_id=stock.warehouse_id,
+            quantity=stock.quantity,
+            last_updated= stock.updated_at or stock.created_at
+        )
+        for stock in stock_list
+    ]
