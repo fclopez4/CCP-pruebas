@@ -462,13 +462,11 @@ Crea el inventario de un producto si este no existe, en caso contrario actualiza
 <td>
 
 ```json
-[
   {
     "product_id":id del producto,
     "warehouse_id": id de la bodega,
     "quantity": unidades del producto que se desean registrar en la bodega,
   }
-]
 ```
 </td>
 </tr>
@@ -549,10 +547,12 @@ Permite cargar múltiples registros de inventario a través de un archivo CSV. C
 <tr> 
 <td> Cuerpo </td> 
 <td>
-Archivo CSV con formato multipart/form-data con el campo inventory-upload. El CSV debe tener las siguientes columnas:
-
-product_id: id del producto
-warehouse_id: id de la bodega
+warehouse_id: id de la bodega <br>
+inventory-upload: archivo CSV con formato multipart/form-data
+<br>
+<br>
+El documento CSV debe tener las siguientes columnas: <br>
+product_id: id del producto <br>
 quantity: unidades del producto que se desean registrar en la bodega
 </td> 
 </tr> 

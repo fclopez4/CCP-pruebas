@@ -11,20 +11,14 @@ def create_delivery(
     raise NotImplementedError("Not implemented yet")
 
 
-def get_warehouse(
-    db: Session, warehouse_id: str
-) -> Warehouse:
+def get_warehouse(db: Session, warehouse_id: str) -> Warehouse:
     """Get warehouse from id."""
     return (
-        db.query(Warehouse)
-        .filter(Warehouse.id == UUID(warehouse_id))
-        .first()
+        db.query(Warehouse).filter(Warehouse.id == UUID(warehouse_id)).first()
     )
 
 
-def get_stock(
-    db: Session, warehouse_id: str, product_id: str
-) -> models.Stock:
+def get_stock(db: Session, warehouse_id: str, product_id: str) -> models.Stock:
     """Get stock by warehouse and product id."""
     return (
         db.query(models.Stock)
@@ -32,6 +26,20 @@ def get_stock(
         .filter(models.Stock.product_id == UUID(product_id))
         .first()
     )
+
+
+def get_list_stock(
+    db: Session, warehouse_id: str, product_id: str
+) -> list[models.Stock]:
+    """Get stock list by filter params."""
+    db_stock = db.query(models.Stock)
+    if warehouse_id:
+        db_stock = db_stock.filter(
+            models.Stock.warehouse_id == UUID(warehouse_id)
+        )
+    if product_id:
+        db_stock = db_stock.filter(models.Stock.product_id == UUID(product_id))
+    return db_stock.all()
 
 
 def increase_stock(
@@ -72,7 +80,7 @@ def create_stock(
     db_stock = models.Stock(
         warehouse_id=UUID(warehouse_id),
         product_id=UUID(product_id),
-        quantity=quantity
+        quantity=quantity,
     )
     db.add(db_stock)
     db.commit()
@@ -81,8 +89,12 @@ def create_stock(
 
 
 def create_operation(
-    db: Session, file_name: str, warehouse_id: str, processed_records: int,
-    successful_records: int, failed_records: int
+    db: Session,
+    file_name: str,
+    warehouse_id: str,
+    processed_records: int,
+    successful_records: int,
+    failed_records: int,
 ) -> models.Operation:
     """Create an operation."""
     db_operation = models.Operation(
@@ -90,7 +102,7 @@ def create_operation(
         warehouse_id=UUID(warehouse_id),
         processed_records=processed_records,
         successful_records=successful_records,
-        failed_records=failed_records
+        failed_records=failed_records,
     )
     db.add(db_operation)
     db.commit()
