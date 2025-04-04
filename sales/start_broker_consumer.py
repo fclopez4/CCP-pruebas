@@ -1,7 +1,5 @@
 import threading
 
-from manufacturers.consumers import GetProductsConsumer
-
 
 def run_thread(threaded_class: type[threading.Thread], num_errors=0):
     try:
@@ -17,4 +15,4 @@ def start_threads(threaded_classes: list):
         run_thread(threaded_class)
 
 
-start_threads([GetProductsConsumer])
+start_threads([])
