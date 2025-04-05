@@ -128,3 +128,12 @@ class GetProductsResponseSchema(BaseModel):
     products: List[ResponseProductDetailSchema]
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class ImageUploadResponse(BaseModel):
+    operation_id: uuid.UUID
+    product_id: uuid.UUID
+    processed_records: int
+    successful_records: int
+    failed_records: int
+    created_at: datetime.datetime
