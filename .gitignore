@@ -7,6 +7,10 @@ inventory/warehouse/__pycache__
 inventory/tests/__pycache__
 inventory/tests/stock/__pycache__
 inventory/tests/warehouse/__pycache__
+suppliers/__pycache__
+suppliers/manufacturers/__pycache__
+suppliers/tests/__pycache__
+suppliers/tests/manufacturers/__pycache__
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
