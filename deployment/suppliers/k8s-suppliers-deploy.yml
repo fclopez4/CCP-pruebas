@@ -217,13 +217,6 @@ spec:
         - name: gcp-key-volume
           mountPath: /etc/gcp
           readOnly: true
-      volumes:
-      - name: gcp-key-volume
-        secret:
-          secretName: gcp-bucket-sa-key
-          items:
-          - key: service-account-key.json
-            path: service-account-key.json
         livenessProbe:
           httpGet:
             path: /suppliers/health
@@ -232,3 +225,10 @@ spec:
           periodSeconds: 5
           timeoutSeconds: 1
           failureThreshold: 2
+      volumes:
+      - name: gcp-key-volume
+        secret:
+          secretName: gcp-bucket-sa-key
+          items:
+          - key: service-account-key.json
+            path: service-account-key.json
