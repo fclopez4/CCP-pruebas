@@ -49,7 +49,9 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       with:
         projectBaseDir: ./inventory
-        args:
-          -Dsonar.projectKey=perspicapps-ccp-inventory
+        args: >
+          -Dsonar.projectKey=ccp-inventory
           -Dsonar.organization=perspicapps-ccp
+          -Dsonar.python.version=3.13
+          -Dsonar.tests=tests/
           -Dsonar.verbose=true
