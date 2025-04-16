@@ -43,3 +43,17 @@ jobs:
     - name: Run unit tests
       working-directory: ./inventory
       run: pipenv run pytest --cov=. -v -s --cov-fail-under=80
+	  
+    - name: Analyze with SonarCloud
+      uses: SonarSource/sonarqube-scan-action@5.1.0
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        projectBaseDir: ./inventory
+        args:
+          -Dsonar.projectKey=perspicapps-ccp
+          -Dsonar.organization=Perspicapps-CCP
+          -Dsonar.verbose=true
+
+
+      
