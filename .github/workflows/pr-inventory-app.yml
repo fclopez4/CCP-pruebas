@@ -50,6 +50,6 @@ jobs:
       with:
         projectBaseDir: ./inventory
         args:
-          -Dsonar.projectKey=perspicapps-ccp
-          -Dsonar.organization=Perspicapps-CCP
+          -Dsonar.projectKey=perspicapps-ccp-inventory
+          -Dsonar.organization=perspicapps-ccp
           -Dsonar.verbose=true
