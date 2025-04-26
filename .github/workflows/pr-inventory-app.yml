@@ -53,5 +53,4 @@ jobs:
           -Dsonar.projectKey=ccp-inventory
           -Dsonar.organization=perspicapps-ccp
           -Dsonar.verbose=true
-          -Dsonar.tests=tests
           -Dsonar.python.coverage.reportPaths=coverage.xml
